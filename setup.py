@@ -19,7 +19,8 @@ setup(
         "pytorch-lightning",
         "torchvision",
         "pycocotools",
-        "scipy"
+        "scipy",
+        "click"
     ],
 
     entry_points={
