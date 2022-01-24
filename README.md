@@ -30,7 +30,7 @@ Currently the only option for `<model-type>` is `keypoint-heatmap`
 
 `<TRAIN-PATH>` and `<EVAL-PATH>` directories should include the Stray scenes to use during training/eval.
 
-The progress of the training is saved into `./lightning_logs` relative to the current directory. We use [Pytorch Lightning](https://pytorch-lightning.readthedocs.io/en/latest/) for implementing the training procedure. The progress can be viewed using `tensorboard --logdir <PATH-TO-LOGS>` (assuming you have installed [Tensorboard](https://www.tensorflow.org/tensorboard).
+The progress of the training is saved into `./lightning_logs` relative to the current directory. We use [Pytorch Lightning](https://pytorch-lightning.readthedocs.io/en/latest/) for implementing the training procedure. The progress can be viewed using `tensorboard --logdir <PATH-TO-LOGS>` (assuming you have installed [Tensorboard](https://www.tensorflow.org/tensorboard)).
 
 The additional flags are:
 * `--batch-size <BATCH-SIZE>` batch size to use during training
