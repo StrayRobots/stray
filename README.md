@@ -9,7 +9,7 @@ To install the package, run `pip install "git+https://github.com/StrayRobots/str
 ## Display a dataset
 The scenes should be in the Stray scene format. See details: https://docs.strayrobots.io/formats/data.html
 
-Run `stray-show <scene_1> <scene_2> <...> <--flags>`
+Run `stray-show <SCENE_1> <SCENE_2> ... <SCENE_N> <--flags>`
 
 Available flags are:
 * `--bbox` show 2D bounding boxes (assuming annotations exist, see https://docs.strayrobots.io/commands/studio.html)
@@ -24,7 +24,7 @@ To pause, press `space`. To skip a scene, press `s`. To quit the dataset preview
 ## Train a model
 The scenes should be in the Stray scene format. See details: https://docs.strayrobots.io/formats/data.html
 
-Run `stray-train <model-type> --train-data <TRAIN-PATH> --eval-data <EVAL-path> <--additional-flags>`
+Run `stray-train <model-type> --train-data <TRAIN-PATH> --eval-data <EVAL-PATH> <--additional-flags>`
 
 Currently the only option for `<model-type>` is `keypoint-heatmap`
 
