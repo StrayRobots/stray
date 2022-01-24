@@ -10,7 +10,7 @@ from pytorch_lightning.callbacks import ModelCheckpoint
 
 @click.command()
 @click.argument('model-type', type=click.Choice(["keypoint-heatmap"]))
-@click.option('--train-data', )
+@click.option('--train-data', type=str, required=True)
 @click.option('--eval-data', type=str, required=True)
 @click.option('--batch-size', type=int, default=2)
 @click.option('--num-workers', type=int, default=1)
