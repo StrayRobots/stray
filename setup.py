@@ -20,7 +20,8 @@ setup(
         "torchvision",
         "pycocotools",
         "scipy",
-        "click"
+        "click",
+        "sklearn"
     ],
 
     entry_points={
