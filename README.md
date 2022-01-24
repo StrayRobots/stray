@@ -4,7 +4,7 @@ Stray SDK is the primary way for integrating Stray Robots capabilities into your
 ## Installation
 We recommend using a virtual environment such as [Conda](https://docs.conda.io/projects/conda/en/latest/user-guide/install/index.html). The environment should have `python>=3.8`.
 
-1. `pip install "git+https://github.com/StrayRobots/stray"`
+To install the package, run `pip install "git+https://github.com/StrayRobots/stray"`
 
 ## Display a dataset
 The scenes should be in the Stray scene format. See details: https://docs.strayrobots.io/formats/data.html
