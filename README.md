@@ -13,7 +13,7 @@ Run `stray-show <SCENE_1> <SCENE_2> ... <SCENE_N> <--flags>`
 
 Available flags are:
 * `--bbox` show 2D bounding boxes (assuming annotations exist, see https://docs.strayrobots.io/commands/studio.html)
-* `--keypoints`show keypoints (assuming annotations exist)
+* `--keypoints` show keypoints (assuming annotations exist)
 * `--segmentation` show object segmentations (assuming annotations exist)
 * `--save` save the displayed images into the scene directory
 * `--rate <RATE>` how many frames to show per second
