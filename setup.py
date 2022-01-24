@@ -18,7 +18,8 @@ setup(
         "trimesh",
         "pytorch-lightning",
         "torchvision",
-        "pycocotools"
+        "pycocotools",
+        "scipy"
     ],
 
     entry_points={
