@@ -47,7 +47,7 @@ class KeypointHeatmapDetector:
             for i, heatmap in enumerate(heatmaps):
                 points = np.argwhere(heatmap > 0.1)[:, [1, 0]]
                 if len(points) == 0:
-                    keypoints.append([])
+                    keypoints.append(np.array([]))
                     continue
                 mean_shift.fit(points)
                 kp = mean_shift.cluster_centers_
