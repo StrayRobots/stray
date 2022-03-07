@@ -5,7 +5,7 @@ import numpy as np
 import trimesh
 from PIL import Image
 from scipy.spatial.transform import Rotation
-from stray.util.camera import Camera
+from stray import camera
 
 class NotASceneException(ValueError):
     pass
@@ -52,6 +52,23 @@ class BoundingBox:
                 origin = self.position + normal * self.dimensions[i]
                 object_mesh = trimesh.intersections.slice_mesh_plane(object_mesh, -normal, origin)
         return object_mesh
+
+    def cut_pointcloud(self, pointcloud):
+        """
+        Returns the points which are inside the bounding box.
+        pointcloud: N x 3 np.array
+        returns: P x 3 points inside the bounding box
+        """
+        axes = np.eye(3)
+        points_local = self.orientation.inv().apply(pointcloud - self.position)
+        x_size = self.dimensions[0] * 0.5
+        y_size = self.dimensions[1] * 0.5
+        z_size = self.dimensions[2] * 0.5
+        inside_x = np.bitwise_and(points_local[:, 0] < x_size, points_local[:, 0] > -x_size)
+        inside_y = np.bitwise_and(points_local[:, 1] < y_size, points_local[:, 1] > -y_size)
+        inside_z = np.bitwise_and(points_local[:, 2] < z_size, points_local[:, 2] > -z_size)
+        mask = np.bitwise_and(np.bitwise_and(inside_x, inside_y), inside_z)
+        return pointcloud[mask]
 
     def background(self, mesh):
         """
@@ -150,7 +167,28 @@ class Scene:
         return len(self.get_image_filepaths())
 
     def camera(self):
-        return Camera((self.frame_width, self.frame_height), self.camera_matrix, np.zeros(4))
+        return camera.Camera((self.frame_width, self.frame_height), self.camera_matrix, np.zeros(4))
+
+
+    def add_keypoint_annotation(self, keypoint: Keypoint):
+        annotation_file = os.path.join(self.scene_path, 'annotations.json')
+        if not os.path.exists(annotation_file):
+            annotations = {}
+        else:
+            with open(annotation_file, 'rt') as f:
+                annotations = json.load(f)
+        if "keypoints" in annotations.keys():
+            annotations["keypoints"].append(keypoint.to_dict())
+        else:
+            annotations["keypoints"] = [keypoint.to_dict()]
+
+        json_object = json.dumps(annotations, indent = 4)
+
+        with open(annotation_file, "w") as outfile:
+            outfile.write(json_object)
+
+        self._read_annotations()
+        self._process_annotations()
 
     @property
     def poses(self):
