@@ -31,6 +31,8 @@ cube_indices = np.array([
     [ 1.,  1.,  1.]], dtype=np.float32)
 
 class BoundingBox:
+    """An abstraction of a bounding box."""
+
     def __init__(self, data):
         self.position = np.array(data['position'])
         self.dimensions = np.array(data['dimensions'])
@@ -92,11 +94,15 @@ class BoundingBox:
 
 
 class Keypoint:
+    """An abstraction of a  keypoint."""
+
     def __init__(self, data):
         self.instance_id = data.get('instance_id', 0)
         self.position = data['position']
 
 class Scene:
+    """An abstraction of a scanned scene."""
+
     def __init__(self, path):
         self.scene_path = path
         self._read_mesh()
