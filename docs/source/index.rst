@@ -7,7 +7,6 @@ Welcome to the Stray SDK documentation!
    :maxdepth: 2
    :hidden:
 
-   installing
    installation
    configuring
    modules
