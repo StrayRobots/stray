@@ -19,7 +19,6 @@ def rotate_bbox(annotation, transforms):
 
 
 def get_shape_augmentations():
-
     #Optional shape augmentations
     return [
         T.RandomFlip(),
