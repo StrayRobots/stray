@@ -1,0 +1,28 @@
+DATALOADER:
+  NUM_WORKERS: 1
+MODEL:
+  ROI_HEADS:
+    NAME: "RROIHeads"
+    BATCH_SIZE_PER_IMAGE: 128
+  ROI_BOX_HEAD:
+    POOLER_TYPE: "ROIAlignRotated"
+    BBOX_REG_WEIGHTS: (1,1,1,1,1) #Another option to try: (10.0, 10.0, 5.0, 5.0, 10.0) 
+  PROPOSAL_GENERATOR:
+    NAME: "RRPN"
+  RPN:
+    HEAD_NAME: "StandardRPNHead"
+    BBOX_REG_WEIGHTS: (1,1,1,1,1) #Another option to try: (10, 10, 5, 5, 1)
+  ANCHOR_GENERATOR:
+    NAME: "RotatedAnchorGenerator"
+    ANGLES: [[-90,-60,-30,0,30,60,90]]
+    
+
+SOLVER:
+  BASE_LR: 0.005
+  CHECKPOINT_PERIOD: 10
+  IMS_PER_BATCH: 1
+  MAX_ITER: 1000
+  STEPS: []
+TEST:
+  AUG:
+    ENABLED: false
