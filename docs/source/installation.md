@@ -4,7 +4,7 @@
 
 Welcome to the Stray toolkit documentation! The Stray toolkit allows you to skip building computer vision models from scratch. Deploy custom detection models in days, not weeks.
 
-# Installation
+## Installation
 
 The Stray Command Line Tool and Stray Studio can be installed using our install script. We currently support macOS and Linux based systems.
 

@@ -1,0 +1,2 @@
+scikit-spatial
+opencv-python
