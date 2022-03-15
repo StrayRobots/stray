@@ -23,6 +23,7 @@ class Camera:
         """
         self.size = size
         self.camera_matrix = K
+        self.Kinv = np.linalg.inv(K)
         self.distortion = D
 
     def project(self, points, T_CW=np.eye(4)):
@@ -62,6 +63,16 @@ class Camera:
         scale_y = new_size[1] / self.size[1]
         new_K = get_scaled_camera_matrix(self.camera_matrix, scale_x, scale_y)
         return Camera(new_size, new_K, self.distortion)
+
+    def unproject(self, xy, z):
+        """
+        xy: image points x and y coordinates. N x 2
+        z: depth value, how far is the point. N sized array
+        returns: 3D point xyz coordinates relative to camera frame.
+        """
+        xy = np.concatenate([xy, np.ones((xy.shape[0], 1))], axis=1)
+        X = (self.Kinv @ xy[:, :, None])[:, :, 0] * z[:, None]
+        return X
 
 def scale_intrinsics(o3d_intrinsics, new_width, new_height):
     """Summary line.

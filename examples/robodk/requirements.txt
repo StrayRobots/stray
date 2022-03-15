@@ -1,0 +1,5 @@
+robodk
+scipy
+numpy
+Pillow
+

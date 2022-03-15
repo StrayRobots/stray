@@ -1,0 +1,2 @@
+picking_setup.rdk filter=lfs diff=lfs merge=lfs -text
+model.pts filter=lfs diff=lfs merge=lfs -text
