@@ -1,0 +1,7 @@
+robodk
+scipy
+numpy
+Pillow
+pynput
+stray
+robolink
