@@ -10,10 +10,9 @@ import csv
 from pynput import keyboard
 from scipy.spatial.transform import Rotation, Slerp
 from PIL import Image
-from robolink import *
-from matplotlib import pyplot as plt
+import robolink
 from simulation import Simulation
-import threading
+import os
 from scipy.spatial.transform import Rotation
 from constants import *
 

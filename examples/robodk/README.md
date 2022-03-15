@@ -47,12 +47,12 @@ As is common these days, the object detection algorithm used is learning based. 
 
 To collect data, we provide the script `scan.py` which runs the simulation. It can be triggerred to stop the production line and scan the current state of the line. This is done by running the following command while the picking simulation is open in the RoboDK UI:
 ```
-python scan.py --out boxes
+python scan.py boxes
 ```
 
 To stop the line and scan the conveyor belt, press the `s` key.
 
-The scans are saved in the path given to the `--out` parameter. For each performed scan, a subdirectory will be created within that directory which will contain the captured color and depth images, along with the camera poses.
+The scans are saved in the path given by `out`. For each performed scan, a subdirectory will be created within that directory which will contain the captured color and depth images, along with the camera poses.
 
 After scanning, we need to process the scans to compute the 3D representation from the captured camera and depth images. This is done using the `stray studio integrate` command. Run it with:
 ```
