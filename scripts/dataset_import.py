@@ -1,12 +1,10 @@
 import os
 import click
 import shutil
-import re
 import numpy as np
 import json
 import csv
 import cv2
-from scipy.spatial.transform import Rotation
 from pathlib import Path
 from skvideo import io
 

@@ -1,7 +1,6 @@
 import os
 import click
-from straylib.segmentation import write_segmentation_masks
-import pickle
+from stray.segmentation import write_segmentation_masks
 
 @click.command()
 @click.argument('dataset', nargs=-1)
