@@ -6,7 +6,7 @@
 The complete pick and place example.
 </p>
 
-This example shows how to build datasets with the [Stray Robots Toolkit](https://docs.strayrobots.io) for picking and placing cardboard boxes of variable sizes within a [RoboDK](https://robodk.com/) simulation environment. The souce code is available here: <a href="https://github.com/StrayRobots/stray">https://github.com/StrayRobots/stray</a>.
+This example shows how to build datasets with the [Stray Robots Toolkit](https://docs.strayrobots.io) for picking and placing cardboard boxes of variable sizes within a [RoboDK](https://robodk.com/) simulation environment. The souce code is available here: <a href="https://github.com/StrayRobots/stray/tree/main/examples/robodk">https://github.com/StrayRobots/stray/tree/main/examples/robodk</a>.
 
 The purpose of this simulation is to showcase how computer vision can be used in dynamic pick and place applications. In this case, our robot is tasked to move boxes rolling on one conveyor belt to the other.
 
@@ -14,7 +14,7 @@ The robot waits for boxes to come down the conveyor belt, where it detects the t
 
 ## Project structure
 
-The main files in this <a href="https://github.com/StrayRobots/stray">project</a> are:
+The main files in this <a href="https://github.com/StrayRobots/stray/tree/main/examples/robodk">project</a> are:
 - `pick.py`
   - Contains the main script containing the picking logic.
 - `scan.py`
