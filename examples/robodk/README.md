@@ -1,5 +1,5 @@
 
-# Automatic box picking with computer vision and RoboDK
+# Automatic pick and place with computer vision and RoboDK
 
 <a target="_blank" href="https://stray-data.nyc3.digitaloceanspaces.com/tutorials/pick_video.mp4" title="Picking with RoboDK"><img src="https://stray-data.nyc3.digitaloceanspaces.com/tutorials/pick_cover.png" alt="Picking with RoboD" /></a>
 <p align = "center">
