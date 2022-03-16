@@ -24,6 +24,7 @@ setup(
         'scikit-spatial',
         'pycocotools',
         'open3d',
-        'opencv-python'
+        'opencv-python',
+        'pytorch_lightning'
     ],
 )

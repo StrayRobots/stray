@@ -4,4 +4,4 @@ numpy
 Pillow
 pynput
 stray
-robolink
+click

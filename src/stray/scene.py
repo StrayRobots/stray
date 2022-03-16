@@ -4,112 +4,21 @@ from pathlib import Path
 import numpy as np
 import trimesh
 from PIL import Image
-from scipy.spatial.transform import Rotation
 from stray import camera
+from stray.primitives import BoundingBox, Rectangle, Keypoint
 
 class NotASceneException(ValueError):
     pass
 
-cube_vertices = np.array([
-    [-1., -1., -1.],
-    [-1., -1.,  1.],
-    [-1.,  1., -1.],
-    [-1.,  1.,  1.],
-    [ 1., -1., -1.],
-    [ 1., -1.,  1.],
-    [ 1.,  1., -1.],
-    [ 1.,  1.,  1.]], dtype=np.float32) * 0.5
-
-cube_indices = np.array([
-    [0., 0., 0.],
-    [0., 0.,  1.],
-    [0.,  1., 0.],
-    [0.,  1.,  1.],
-    [ 1., 0., 0.],
-    [ 1., 0.,  1.],
-    [ 1.,  1., 0.],
-    [ 1.,  1.,  1.]], dtype=np.float32)
-
-class BoundingBox:
-    """An abstraction of a bounding box."""
-
-    def __init__(self, data):
-        self.position = np.array(data['position'])
-        self.dimensions = np.array(data['dimensions'])
-        q = data['orientation']
-        self.orientation = Rotation.from_quat([q['x'], q['y'], q['z'], q['w']])
-        self.instance_id = data.get('instance_id', 0)
-
-    def cut(self, mesh):
-        """
-        Cuts the background out of the mesh, removing anything outside the bounding box.
-        mesh: trimesh mesh
-        returns: trimesh mesh for object
-        """
-        object_mesh = mesh
-        axes = np.eye(3)
-        for direction in [-1.0, 1.0]:
-            for i, axis in enumerate(axes):
-                normal = direction * self.orientation.apply(axis * 0.5)
-                origin = self.position + normal * self.dimensions[i]
-                object_mesh = trimesh.intersections.slice_mesh_plane(object_mesh, -normal, origin)
-        return object_mesh
-
-    def cut_pointcloud(self, pointcloud):
-        """
-        Returns the points which are inside the bounding box.
-        pointcloud: N x 3 np.array
-        returns: P x 3 points inside the bounding box
-        """
-        axes = np.eye(3)
-        points_local = self.orientation.inv().apply(pointcloud - self.position)
-        x_size = self.dimensions[0] * 0.5
-        y_size = self.dimensions[1] * 0.5
-        z_size = self.dimensions[2] * 0.5
-        inside_x = np.bitwise_and(points_local[:, 0] < x_size, points_local[:, 0] > -x_size)
-        inside_y = np.bitwise_and(points_local[:, 1] < y_size, points_local[:, 1] > -y_size)
-        inside_z = np.bitwise_and(points_local[:, 2] < z_size, points_local[:, 2] > -z_size)
-        mask = np.bitwise_and(np.bitwise_and(inside_x, inside_y), inside_z)
-        return pointcloud[mask]
-
-    def background(self, mesh):
-        """
-        Cuts the object out of the mesh, removing everything inside the bounding box.
-        mesh: trimesh mesh
-        returns: trimesh mesh for background
-        """
-        axes = np.eye(3)
-        background = trimesh.Trimesh()
-        for direction in [-1.0, 1.0]:
-            for i, axis in enumerate(axes):
-                normal = direction * self.orientation.apply(axis * 0.5)
-                origin = self.position + normal * self.dimensions[i]
-                outside = trimesh.intersections.slice_mesh_plane(mesh, normal, origin)
-                background = trimesh.util.concatenate(background, outside)
-        return background
-
-    def vertices(self):
-        vertices = cube_vertices * self.dimensions
-        return self.position + self.orientation.apply(vertices)
-
-
-class Keypoint:
-    """An abstraction of a  keypoint."""
-
-    def __init__(self, data):
-        self.instance_id = data.get('instance_id', 0)
-        self.position = data['position']
-
 class Scene:
-    """An abstraction of a scanned scene."""
-
     def __init__(self, path):
         self.scene_path = path
         self._read_mesh()
         self._read_annotations()
         self._read_metadata()
-        self._bounding_boxes = None
         self._keypoints = None
+        self._bounding_boxes = None
+        self._rectangles = None
         self._poses = None
         self._metadata = None
         self._read_intrinsics()
@@ -162,12 +71,15 @@ class Scene:
             self.frame_height = camera_data['height']
 
     def _process_annotations(self):
-        self._bounding_boxes = []
-        for bbox in self.annotations.get('bounding_boxes', []):
-            self._bounding_boxes.append(BoundingBox(bbox))
         self._keypoints = []
         for keypoint in self.annotations.get('keypoints', []):
             self._keypoints.append(Keypoint(keypoint))
+        self._bounding_boxes = []
+        for bbox in self.annotations.get('bounding_boxes', []):
+            self._bounding_boxes.append(BoundingBox(bbox))
+        self._rectangles = []
+        for rectangle in self.annotations.get('rectangles', []):
+            self._rectangles.append(Rectangle(rectangle))
 
     def __len__(self):
         return len(self.get_image_filepaths())
@@ -175,26 +87,8 @@ class Scene:
     def camera(self):
         return camera.Camera((self.frame_width, self.frame_height), self.camera_matrix, np.zeros(4))
 
-
-    def add_keypoint_annotation(self, keypoint: Keypoint):
-        annotation_file = os.path.join(self.scene_path, 'annotations.json')
-        if not os.path.exists(annotation_file):
-            annotations = {}
-        else:
-            with open(annotation_file, 'rt') as f:
-                annotations = json.load(f)
-        if "keypoints" in annotations.keys():
-            annotations["keypoints"].append(keypoint.to_dict())
-        else:
-            annotations["keypoints"] = [keypoint.to_dict()]
-
-        json_object = json.dumps(annotations, indent = 4)
-
-        with open(annotation_file, "w") as outfile:
-            outfile.write(json_object)
-
-        self._read_annotations()
-        self._process_annotations()
+    def primitives(self):
+        return self.keypoints + self.bounding_boxes + self.rectangles
 
     @property
     def poses(self):
@@ -203,16 +97,22 @@ class Scene:
         return self._poses
 
     @property
+    def keypoints(self):
+        if self._keypoints is None:
+            self._process_annotations()
+        return self._keypoints
+
+    @property
     def bounding_boxes(self):
         if self._bounding_boxes is None:
             self._process_annotations()
         return self._bounding_boxes
 
     @property
-    def keypoints(self):
-        if self._keypoints is None:
+    def rectangles(self):
+        if self._rectangles is None:
             self._process_annotations()
-        return self._keypoints
+        return self._rectangles
 
     @property
     def bbox_categories(self):
