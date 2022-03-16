@@ -6,7 +6,7 @@
 The complete pick and place example.
 </p>
 
-This example shows how to build datasets with the [Stray Robots Toolkit](https://docs.strayrobots.io) for picking and placing cardboard boxes of variable sizes within a [RoboDK](https://robodk.com/) simulation environment.
+This example shows how to build datasets with the [Stray Robots Toolkit](https://docs.strayrobots.io) for picking and placing cardboard boxes of variable sizes within a [RoboDK](https://robodk.com/) simulation environment. The souce code is available here: <a href="https://github.com/StrayRobots/stray">https://github.com/StrayRobots/stray</a>.
 
 The purpose of this simulation is to showcase how computer vision can be used in dynamic pick and place applications. In this case, our robot is tasked to move boxes rolling on one conveyor belt to the other.
 
