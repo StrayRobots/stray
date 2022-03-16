@@ -14,7 +14,7 @@ The robot waits for boxes to come down the conveyor belt, where it detects the t
 
 ## Project structure
 
-The main files in this project are:
+The main files in this <a href="https://github.com/StrayRobots/stray">project</a>. are:
 - `pick.py`
   - Contains the main script containing the picking logic.
 - `scan.py`
