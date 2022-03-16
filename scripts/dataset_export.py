@@ -1,10 +1,10 @@
 import os
-from straylib.scene import Scene
+from stray.scene import Scene
 import shutil
 import argparse
 import yaml
 import numpy as np
-from straylib.export import bbox_2d_from_bbox_3d, bbox_2d_from_mesh, bbox_2d_from_pointcloud
+from stray.export import bbox_2d_from_bbox_3d, bbox_2d_from_mesh, bbox_2d_from_pointcloud
 
 def read_args():
     parser = argparse.ArgumentParser()

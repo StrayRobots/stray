@@ -1,9 +1,8 @@
 import os
 import cv2
 import numpy as np
-from numpy.lib.type_check import imag
-from straylib.export import bbox_2d_from_bbox_3d, bbox_2d_from_mask, validate_segmentations
-from straylib.scene import Scene
+from stray.export import bbox_2d_from_bbox_3d, bbox_2d_from_mask, validate_segmentations
+from stray.scene import Scene
 import click
 import pycocotools.mask as mask_util
 import pickle

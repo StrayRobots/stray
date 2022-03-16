@@ -1,11 +1,7 @@
 import os
 import click
-import shutil
-import re
 import numpy as np
 import json
-import cv2
-from skvideo import io
 
 def _resize_camera_matrix(camera_matrix, scale_x, scale_y):
     if scale_x == 1.0 and scale_y == 1.0:
