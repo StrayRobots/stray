@@ -5,9 +5,3 @@ requires = [
     "wheel"
 ]
 build-backend = "setuptools.build_meta"
-
-
-[project]
-name = "stray"
-authors = [{email = "hello@strayrobots.io"}]
-dynamic = ["version", "description"]
