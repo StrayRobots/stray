@@ -6,7 +6,7 @@ This tutorial will show you: 
 2. How to configure and set up training for rotated bounding box detection using Detectron2
 3. How to visualize predictions and labels
 
-![Labelme polygon annotations](https://stray-data.nyc3.digitaloceanspaces.com/tutorials/labelme.png)
+![Labelme polygon annotations](https://stray-data.nyc3.digitaloceanspaces.com/tutorials/labelmeui.png)
 <p align = "center">
 We are using labelme (<a href="https://github.com/wkentaro/labelme">https://github.com/wkentaro/labelme</a>) polygon annotation to label the container ships in the images (Photo by [Tom Fisk](https://www.pexels.com/@tomfisk) from [Pexels](https://www.pexels.com/)).
 </p>
@@ -81,7 +81,7 @@ Install rest of the dependencies with `pip install -r requirements.txt`.
 
 ### Test the installation and visualize the dataset
 
-![Detectron2 rotated bounding boxes](https://stray-data.nyc3.digitaloceanspaces.com/tutorials/ship.png)
+![Detectron2 rotated bounding boxes](https://stray-data.nyc3.digitaloceanspaces.com/tutorials/labels.png)
 <p align = "center">
 The polygons are used to determine the rotated bounding boxes. (Photo by [Tom Fisk](https://www.pexels.com/@tomfisk) from [Pexels](https://www.pexels.com/))
 </p>
@@ -94,7 +94,7 @@ To run the training, run `python train_rotated_bbox.py <path-to-dataset> --num-g
 
 ## Predictions
 
-![Detectron2 predictions](https://stray-data.nyc3.digitaloceanspaces.com/tutorials/prediction.png)
+![Detectron2 predictions](https://stray-data.nyc3.digitaloceanspaces.com/tutorials/predictions.png)
 <p align = "center">
 Predictions from the trained model. (Photo by [Tom Fisk](https://www.pexels.com/@tomfisk) from [Pexels](https://www.pexels.com/))
 </p>
