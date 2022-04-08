@@ -42,6 +42,9 @@ class VisualDebugger:
         box.paint_uniform_color(np.array([0.5, 0.5, 1.0]))
         self.geometries.append(box.transform(T_WB))
 
+    def add_mesh(self, mesh):
+        self.geometries.append(mesh)
+
     def show(self):
         o3d.visualization.draw_geometries(self.geometries)
 
