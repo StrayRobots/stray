@@ -9,7 +9,7 @@ class Camera:
         """
         K: 3 x 3 camera projection matrix.
         D: distortion parameters.
-        
+
         Summary line.
 
         Extended description of function.
@@ -96,7 +96,7 @@ def scale_intrinsics(o3d_intrinsics, new_width, new_height):
     scale_x = new_width / old_width
     scale_y = new_height / old_height
     fx, fy = fx * scale_x, fy * scale_y
-    cx, cy = cx * scale_x, fy * scale_y
+    cx, cy = cx * scale_x, cy * scale_y
     return o3d.camera.PinholeCameraIntrinsic(int(new_width), int(new_height), fx, fy, cx, cy)
 
 def get_scaled_camera_matrix(camera_matrix, width_scale, height_scale):
