@@ -80,8 +80,10 @@ def write_depth(dataset, every, depth_out_dir, width, height, rotate):
         depth[confidence < 2] = 0
         depth = rotate_depth(depth, rotate)
         cv2.imwrite(os.path.join(depth_out_dir, number + '.png'), depth)
+        depth_width, depth_height = depth.shape[1], depth.shape[0]
+    return (depth_width, depth_height)
 
-def write_intrinsics(dataset, out, width, height, full_width, full_height, rotate, fps):
+def write_intrinsics(dataset, out, width, height, full_width, full_height, depth_size, rotate, fps):
     intrinsics = np.loadtxt(os.path.join(dataset, 'camera_matrix.csv'), delimiter=',')
     data = {}
     intrinsics_scaled = _resize_and_rotate_camera_matrix(intrinsics, width / full_width, height / full_height, rotate)
@@ -93,6 +95,8 @@ def write_intrinsics(dataset, out, width, height, full_width, full_height, rotat
     data['depth_scale'] = 1000.0
     data['fps'] = fps
     data['depth_format'] = 'Z16'
+    data['depth_width'] = depth_size[0]
+    data['depth_height'] = depth_size[1]
     with open(os.path.join(out, 'camera_intrinsics.json'), 'wt') as f:
         f.write(json.dumps(data, indent=4, sort_keys=True))
 
@@ -189,7 +193,7 @@ def main(scenes, out, every, width, height, rotate, intrinsics):
         os.makedirs(rgb_out)
         os.makedirs(depth_out)
 
-        write_depth(scene_path, every, depth_out, width, height, rotate)
+        depth_size = write_depth(scene_path, every, depth_out, width, height, rotate)
         full_width, full_height, fps = write_frames(
             scene_path, every, rgb_out, width, height, rotate)
 
@@ -199,9 +203,9 @@ def main(scenes, out, every, width, height, rotate, intrinsics):
 
         if intrinsics is None:
             if os.path.exists(os.path.join(scene_path, 'camera_matrix.csv')):
-                print("Writing factory intrinsics.", end='\n')
+                print("Writing device intrinsics.", end='\n')
                 write_intrinsics(scene_path, target_path, width,
-                         height, full_width, full_height, rotate, fps)
+                         height, full_width, full_height, depth_size, rotate, fps)
             else:
                 print("Warning: no camera matrix found, skipping.")
         else:
