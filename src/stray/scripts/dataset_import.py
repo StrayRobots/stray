@@ -5,6 +5,7 @@ import numpy as np
 import json
 import csv
 import cv2
+from tqdm import tqdm
 from pathlib import Path
 from skvideo import io
 
@@ -29,10 +30,9 @@ def write_frames(dataset, every, rgb_out_dir, width, height, rotate):
     rgb_video = os.path.join(dataset, 'rgb.mp4')
     video = io.FFmpegReader(rgb_video)
     fps = video.inputfps
-    for i, frame in enumerate(video.nextFrame()):
+    for i, frame in tqdm(enumerate(video.nextFrame()), desc="Importing color"):
         if i % every != 0:
             continue
-        print(f"Writing rgb frame {i:06}" + " " * 10, end='\r')
         frame = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)
 
         if rotate == "cw":
@@ -50,20 +50,19 @@ def write_frames(dataset, every, rgb_out_dir, width, height, rotate):
     print('\r')
     return full_width, full_height, fps
 
-def resize_and_rotate_depth(frame, width, height, rotate):
+def rotate_depth(frame, rotate):
     if rotate == "cw":
         frame = cv2.rotate(frame, cv2.ROTATE_90_CLOCKWISE)
     elif rotate == "ccw":
         frame = cv2.rotate(frame, cv2.ROTATE_90_COUNTERCLOCKWISE)
-    out = cv2.resize(frame, (width, height), interpolation=cv2.INTER_NEAREST_EXACT)
-    out[out < 10] = 0
-    return out
+    frame[frame < 10] = 0
+    return frame
 
 def write_depth(dataset, every, depth_out_dir, width, height, rotate):
     depth_dir_in = os.path.join(dataset, 'depth')
     confidence_dir = os.path.join(dataset, 'confidence')
     files = sorted(os.listdir(depth_dir_in))
-    for i, filename in enumerate(files):
+    for i, filename in enumerate(tqdm(files, desc="Importing depth")):
         file_extension = filename.split('.')[-1]
         if file_extension not in ['npy', 'png'] or i % every != 0:
             continue
@@ -79,7 +78,7 @@ def write_depth(dataset, every, depth_out_dir, width, height, rotate):
         else:
             confidence = np.ones_like(depth_file, dtype=np.uint8) * 2
         depth[confidence < 2] = 0
-        depth = resize_and_rotate_depth(depth, width, height, rotate)
+        depth = rotate_depth(depth, rotate)
         cv2.imwrite(os.path.join(depth_out_dir, number + '.png'), depth)
 
 def write_intrinsics(dataset, out, width, height, full_width, full_height, rotate, fps):
