@@ -69,6 +69,8 @@ class Scene:
             self.camera_matrix = np.array(camera_data['intrinsic_matrix']).reshape(3, 3).T
             self.frame_width = camera_data['width']
             self.frame_height = camera_data['height']
+            self.depth_width = camera_data.get('depth_width', None)
+            self.depth_height = camera_data.get('depth_height', None)
 
     def _process_annotations(self):
         self._keypoints = []
