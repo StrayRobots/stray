@@ -97,6 +97,15 @@ class BoundingBox:
         vertices = cube_vertices * self.dimensions
         return self.position + self.orientation.apply(vertices)
 
+    def transform(self):
+        """
+        Returns the transformation taking points in the object frame to the world frame.
+        """
+        T = np.eye(4)
+        T[:3, :3] = self.orientation.as_matrix()
+        T[:3, 3] = self.position
+        return T
+
 
 class Keypoint:
     def __init__(self, data):
